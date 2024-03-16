@@ -10,7 +10,7 @@ export function Footer() {
     year = year.getFullYear();
 
     return (
-        <footer className="min-h-[80px]flex flex-col justify-center py-4 md:grid md:grid-cols-3 gap-4 items-center bg-slate-800 px-16">
+        <footer className="min-h-[80px]flex flex-col justify-center md:grid md:grid-cols-3 gap-4 items-center bg-slate-800 px-16 py-4">
             <span className={styles.footerText}>&copy; {year} Irun Co. Limited</span>
 
             <ul className="flex flex-row gap-8 ">
