@@ -6,11 +6,7 @@ import { Merriweather } from "next/font/google";
 import { FaArrowRight } from "react-icons/fa";
 import { Card, CardActions, CardContent, CardMedia, Typography, Button } from "@mui/material";
 
-const MerriReg400 = Merriweather({
-  subsets: ['latin'],
-  display: 'swap',
-  weight: '400'
-});
+
 
 const MerriReg900 = Merriweather({
   subsets: ['latin'],
