@@ -100,7 +100,7 @@ export function NavBar() {
                             <MdKeyboardArrowDown className="text-gray-200" />
                         </blockquote>
 
-                        <blockquote className="">
+                        <blockquote className="flex flex-row items-center">
                             <BsCurrencyDollar className="text-amber-200" />
                             <span className="text-gray-200">USD</span>
                             <MdKeyboardArrowDown className="text-gray-200" />
