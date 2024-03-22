@@ -4,9 +4,8 @@ import { useFormik } from "formik";
 import * as yup from 'yup';
 
 const formRules = yup.object().shape({
-    productName:yup.string().required('This field is mandatory').min(3,'Mininum of 3 character required').max(10,'Maximum of 10 characters'),
-
-    desc:yup.string().required('This field is mandatory').min(16,'Mininum of 16 character required').max(10000,'Maximum of 10000 characters'),
+    productName:yup.string().required('This field is mandatory').min(3,'Minimum of 3 character required').max(10,'Maximum of 10 characters'),
+    desc:yup.string().required('This field is mandatory').min(16,'Minimum of 16 character required').max(10000,'Maximum of 10000 characters'),
     price:yup.number().required().min(100),
     stock:yup.number().required().min(1),
 });
@@ -36,7 +35,7 @@ export default function CreateAccount () {
                     id="productName"
                     value={values.productName}
                    onChange={handleChange}
-                   onBlur={handleBlur} />
+                   onBlur={handleBlur}/>
                    {touched.productName && errors.productName
                     ? <span className="text-red-500 text-xs">{errors.productName}</span>
                    : null}
@@ -45,30 +44,30 @@ export default function CreateAccount () {
                     <div className="mb-2">
                         <label className="text-gray-500 text-sm">product description</label>
                     <TextField
-                    placeholder="product name"
+                    placeholder="product description"
                     className="w-full"
-                    id="productName"
+                    id="desc"
                     multiline={true}
-                    value={values.productName}
+                    value={values.desc}
                    onChange={handleChange}
                    onBlur={handleBlur} />
-                   {touched.productName && errors.productName
-                    ? <span className="text-red-500 text-xs">{errors.productName}</span>
+                   {touched.desc && errors.desc
+                    ? <span className="text-red-500 text-xs">{errors.desc}</span>
                    : null}
                     </div>
 
                     <div className="mb-2">
                         <label className="text-gray-500 text-sm">product price</label>
                     <TextField
-                    placeholder="product name"
+                    placeholder="product price"
                     className="w-full"
                     id="price"
                     type="number"
-                    value={values.productName}
+                    value={values.price}
                    onChange={handleChange}
                    onBlur={handleBlur} />
-                   {touched.productName && errors.productName
-                    ? <span className="text-red-500 text-xs">{errors.productName}</span>
+                   {touched.price && errors.price
+                    ? <span className="text-red-500 text-xs">{errors.price}</span>
                    : null}
                     </div>
 
@@ -78,11 +77,12 @@ export default function CreateAccount () {
                     placeholder="eg. 200"
                     className="w-full"
                     id="stock"
-                    value={values.productName}
+                     type="number"
+                    value={values.stock}
                    onChange={handleChange}
                    onBlur={handleBlur} />
-                   {touched.productName && errors.productName
-                    ? <span className="text-red-500 text-xs">{errors.productName}</span>
+                   {touched.stock && errors.stock
+                    ? <span className="text-red-500 text-xs">{errors.stock}</span>
                    : null}
                     </div>
 
