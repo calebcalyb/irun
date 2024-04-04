@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Link from "next/link";
+import { useSession, signOut } from 'next-auth/react';
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -9,7 +10,7 @@ import { CiUser } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 import { CiShoppingCart } from "react-icons/ci";
 import { BsCurrencyDollar } from "react-icons/bs";
-import { GoDotFill } from "react-icons/go";
+import { GoDotFill, GoSignOut } from "react-icons/go";
 import { Merriweather } from "next/font/google";
 
 const MerriReg400 = Merriweather({
@@ -19,6 +20,7 @@ const MerriReg400 = Merriweather({
 });
 
 export function NavBar() {
+    const { data: session } = useSession
     const [showMenu, setShowMenu] = React.useState(true);
     return (
         <>
@@ -50,7 +52,7 @@ export function NavBar() {
                 </div>
 
                 {/* show only on desktop */}
-                <div className="hidden lg:flex flex-row gap-6" >
+                <div className="hidden lg:flex flex-row justify-end gap-6" >
                     <div className="flex flex-row gap-4" >
                         <blockquote className="flex flex-row items-center">
                             <FaGlobeAmericas className="text-amber-400" />
@@ -59,40 +61,49 @@ export function NavBar() {
                         </blockquote>
 
                         <blockquote className="flex flex-row items-center">
-                            <BsCurrencyDollar className="text-amber-200" />
+                            <BsCurrencyDollar className="text-amber-400" />
                             <span className="text-gray-200">USD</span>
                             <MdKeyboardArrowDown className="text-gray-200" />
                         </blockquote>
-
                     </div>
 
-                    <ul className="flex flex-row gap-4 items-center">
-                        <li><Link href="#"><CiSearch className={styles.navLinkIcon} /></Link></li>
-                        <li><Link href="#"><CiUser className={styles.navLinkIcon} /></Link></li>
-                        <li><Link href="#"><CiHeart className={styles.navLinkIcon} /></Link></li>
-                        <li><Link href="#"><CiShoppingCart className={styles.navLinkIcon} /></Link></li>
-                    </ul>
+                    {/* <div className='flex flex-col gap-3'> */}
+                    {session ?
+                        <ul className="flex flex-row gap-4 items-center">
+                            <li><Link href="#"><CiUser className={styles.navLinkIcon} /></Link></li>
+                            <li><GoSignOut
+                                onClick={() => signOut()} className={styles.navLinkIcon} /></li>
+                        </ul>
+                        :
+                        <ul className="flex flex-row gap-4 items-center">
+                            <li><Link className={styles.navLink} href="/auth/signin">sign in</Link></li>
+                        </ul>
+                    }
+                    {/* </div> */}
                 </div>
             </nav>
             {/* for mobible - only NAV */}
-            <div className={`${!showMenu ? 'flex' : 'hidden'} flex-col gap-8 justify-center items-center
+            <div className={`${!showMenu ? 'flex' : 'hidden'} flex-col justify-center items-center gap-8
              lg:hidden min-h-80 w-full absolute top-[60px] left-0 z-10 bg-gray-800`}>
                 <ul className="flex flex-col gap-3 ">
-                    <li className='text-gray-200 text-2xl text-center'><Link href="#">Shop</Link></li>
-                    <li className='text-gray-200 text-2xl text-center'><Link href="#">Accessories</Link></li>
-                    <li className='text-gray-200 text-2xl text-center'><Link href="#">Showroom</Link></li>
+                    <li className='text-gray-200 text-2xl text-center'><Link href="/shop">Shop</Link></li>
                     <li className='text-gray-200 text-2xl text-center'><Link href="/contact-us">Contact Us</Link></li>
                 </ul>
 
 
-
-                <div className="flex flex-col gap-3" >
-                    <ul className="flex flex-row gap-4 items-center">
-                        <li><Link href="#"><CiSearch className={styles.navLinkIcon} /></Link></li>
-                        <li><Link href="#"><CiUser className={styles.navLinkIcon} /></Link></li>
-                        <li><Link href="#"><CiHeart className={styles.navLinkIcon} /></Link></li>
-                        <li><Link href="#"><CiShoppingCart className={styles.navLinkIcon} /></Link></li>
-                    </ul>
+                <div className="flex flex-col gap-3">
+                    {session ?
+                        <ul className="flex flex-row justify-center gap-4 items-center">
+                            <li><Link href="#"><CiUser className={styles.navLinkIcon} /></Link></li>
+                            <li><GoSignOut
+                                onClick={() => signOut()}
+                                className={styles.navLinkIcon} /></li>
+                        </ul>
+                        :
+                        <ul className="flex flex-row gap-4 justify-center items-center">
+                            <li><Link className={styles.navLink} href="/auth/signin">Sign in</Link></li>
+                        </ul>
+                    }
                     <div className="flex flex-row gap-4" >
                         <blockquote className="flex flex-row items-center">
                             <FaGlobeAmericas className="text-amber-400" />
