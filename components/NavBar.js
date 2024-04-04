@@ -28,7 +28,7 @@ export function NavBar() {
          md:px-8 lg:px-16">
                 {/* show only on desktop */}
                 <ul className="hidden lg:flex flex-row gap-4 items-center">
-                    <li className={styles.navLink}><Link href="#">Shop</Link></li>
+                    <li className={styles.navLink}><Link href="#">Shops</Link></li>
                     <li className={styles.navLink}><Link href="#">Accessories</Link></li>
                     <li className={styles.navLink}><Link href="#">Showroom</Link></li>
                     <li className={styles.navLink}><Link href="/contact-us">Contact Us</Link></li>
