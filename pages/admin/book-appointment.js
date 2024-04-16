@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { TextField, Button } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from 'yup';
-import { firestoreDb } from "@/config/firebase.config";
+import { firestoreDB } from "@/config/firebase.config";
 import { collection, addDoc } from "firebase/firestore";
 
 const formRules = yup.object().shape({
@@ -18,27 +18,56 @@ const formRules = yup.object().shape({
 });
 
 export default function CreateAccount() {
-    const {data:session} = useSession();
+    const { data: session } = useSession();
+    // const [selectedFile, setSelectedFile] = useState(null);
 
-    const { values,handleChange,handleBlur,handleSubmit,errors,touched } = useFormik({
-        initialValues: { name: "", message: "", phone:"", date:"",email:"" },
+    const addImageToPost = (e) => {
+        const reader = new FileReader();
+
+        if (e.target.files[0]) {
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        reader.onload = readerEvent => {
+            setSelectedFile(readerEvent.target.result);
+        }
+    }
+
+    const bookAppointment = async () => {
+        const docRef = await addDoc(collection(firestoreDB, 'products'), {
+            name: values.name,
+            message: values.message,
+            phone: values.phone,
+            date: values.date,
+            email: values.email,
+            createdAt: new Date().getTime(),
+            bookedBy: session.uid,
+        });
+
+        // const imageRef = ref(storage, `products/${docRef.id}/image`);
+
+        // if (selectedFile) {
+        //     await uploadString(imageRef, selectedFile, "data_url")
+        //         .then(async () => {
+        //             const downloadURL = await getDownloadURL(imageRef);
+        //             await updateDoc(doc(firestoreDB, 'products', docRef.id), {
+        //                 coverImage: downloadURL
+        //             });
+        //         });
+        // } else {
+
+        // }
+    }
+
+
+    const { values, handleChange, handleBlur, handleSubmit, errors, touched } = useFormik({
+        initialValues: { name: "", message: "", phone: "", date:"", email: "" },
         onSubmit: () => {
-            addDoc(collection(firestoreDb, 'products'),{
-                name:values.name,
-                message:values.message,
-                phone:values.phone,
-                date:values.date,
-                email:values.email,
-                createdAt:new Date().getTime(),
-                createdBy: session.uid,
-
-            })
-            .then(() => console.log('successful'))
-            .catch((e) => console.log(e))
+            bookAppointment();
 
         },
         validationSchema: formRules
-    })
+    });
     return (
         <>
             <Head>
@@ -49,10 +78,10 @@ export default function CreateAccount() {
                     <h1 className="text-2xl text-amber-900 font-bold">Book an Appointment</h1>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-2">
-                            <label className="text-gray-500 text-sm">Name</label>
+                            <label className="text-red-800 text-sm">Name</label>
                             <TextField
                                 placeholder="Enter your Name"
-                                className="w-full"
+                                className="md:w-full"
                                 id="name"
                                 value={values.name}
                                 onChange={handleChange}
@@ -64,10 +93,10 @@ export default function CreateAccount() {
 
 
                         <div className="mb-2">
-                            <label className="text-gray-500 text-sm">Phone</label>
+                            <label className="text-red-800 text-sm">Phone</label>
                             <TextField
                                 placeholder="Enter your phone(e.g.+23481429372)"
-                                className="w-full"
+                                className="md:w-full"
                                 id="phone"
                                 type="number"
                                 value={values.phone}
@@ -81,10 +110,10 @@ export default function CreateAccount() {
                         
 
                         <div className="mb-2">
-                            <label className="text-gray-500 text-sm">Appointment Date</label>
+                            <label className="text-orange-800 text-sm">Appointment Date</label>
                             <TextField
                                 input="date"
-                                className="w-full"
+                                className="md:w-full"
                                 id="date"
                                 type="datetime-local"
                                 value={values.date}
@@ -96,10 +125,10 @@ export default function CreateAccount() {
                         </div>
 
                         <div className="mb-2">
-                            <label className="text-gray-500 text-sm">Email Address</label>
+                            <label className="text-red-800 text-sm">Email Address</label>
                             <TextField
                                 input="email"
-                                className="w-full"
+                                className="md:w-full"
                                 id="email"
                                 type="email"
                                 value={values.email}
@@ -115,10 +144,10 @@ export default function CreateAccount() {
 
 
                         <div className="mb-2">
-                            <label className="text-gray-500 text-sm">Leave a Message</label>
+                            <label className="text-red-800 text-sm">Leave a Message</label>
                             <TextField
                                 placeholder="Enter your Message"
-                                className="w-full"
+                                className="md:w-full"
                                 id="message"
                                 multiline={true}
                                 value={values.message}
@@ -142,16 +171,16 @@ export default function CreateAccount() {
 }
 export async function getServerSideProps (context) {
     const session = await getServerSession(context.req,context.res,authOptions);
-    if (session) {
-        if (session.user_data?.accountType == 'admin') {
-            return {redirect:{destination:'/admin/create-product',permanent:false}}
-        } 
-        else if (session.user_data?.accountType == 'buyer') {
-            return {redirect:{destination:'/',permanent:false}}
-        } 
-    } else {
-        return {redirect:{destination:'/auth/signin',permanent:false}}
-    }
+    // if (session) {
+    //     if (session.user_data?.accountType == 'admin') {
+    //         return {redirect:{destination:'/admin/create-product',permanent:false}}
+    //     } 
+    //     else if (session.user_data?.accountType == 'buyer') {
+    //         return {redirect:{destination:'/',permanent:false}}
+    //     } 
+    // } else {
+    //     return {redirect:{destination:'/auth/signin',permanent:false}}
+    // }
     return {
         props:{
             session:JSON.parse(JSON.stringify(session))
